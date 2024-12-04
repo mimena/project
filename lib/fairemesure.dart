@@ -838,10 +838,7 @@ class _RomMeasurementScreenState extends State<RomMeasurementScreen> {
     );
   }
 
-  Widget _buildActionButton(String label,
-      IconData icon,
-      Color color,
-      VoidCallback onPressed,) {
+  Widget _buildActionButton(String label, IconData icon, Color color, VoidCallback onPressed) {
     return GestureDetector(
       onTap: onPressed,
       child: Column(
@@ -933,7 +930,7 @@ class _RomMeasurementScreenState extends State<RomMeasurementScreen> {
                     ),
                   ),
                   Text(
-                    'Périmètre: ${perimeterM.toStringAsFixed(2)}m',
+                    'Pied carré : ${perimeterM.toStringAsFixed(2)}pi²',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -951,7 +948,7 @@ class _RomMeasurementScreenState extends State<RomMeasurementScreen> {
             child: Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFF0066A6).withOpacity(0.9),
+                color: const Color(0xFF2496E0).withOpacity(0.9),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
@@ -972,48 +969,54 @@ class _RomMeasurementScreenState extends State<RomMeasurementScreen> {
                   ),
                   const SizedBox(height: 20),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildActionButton(
-                        'Supprimer point',
-                        Icons.delete,
-                        isDeleteMode ? Colors.red : Colors.grey,
-                            () {
-                          if (selectedPoint != null && isDeleteMode) {
-                            _deletePoint(selectedPoint!);
-                          } else {
-                            _toggleDeleteMode();
-                          }
-                        },
-                      ),
-                      _buildActionButton(
-                        'Annuler tout',
-                        Icons.close,
-                        !isSurfaceFixed ? Colors.red : Colors.grey,
-                        !isSurfaceFixed ? _cancelMeasurement : () {},
-                      ),
+                      // Top row: Marker and Update buttons
                       _buildActionButton(
                         'Placer un marqueur',
                         Icons.add_location,
                         isMarkerMode && !isSurfaceFixed
-                            ? Colors.green
-                            : Colors.grey,
+                            ? Colors.grey
+                            : Colors.blue,
                         !isSurfaceFixed
-                            ? () =>
-                            setState(() => isMarkerMode = !isMarkerMode)
+                            ? () => setState(() => isMarkerMode = !isMarkerMode)
                             : () {},
                       ),
+                      const SizedBox(width: 20),
                       _buildActionButton(
                         'Mettre à jour',
                         Icons.edit,
-                        !isSurfaceFixed ? updateButtonColor : Colors.grey,
+                        !isSurfaceFixed ? Colors.grey : Colors.blueAccent,
                         !isSurfaceFixed ? _toggleUpdateMode : () {},
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Bottom row: Cancel and Complete buttons
+                      _buildActionButton(
+                        'Annuler tout',
+                        Icons.close,
+                        !isSurfaceFixed ? Colors.grey : Colors.red,
+                        !isSurfaceFixed ? _cancelMeasurement : () {},
+                      ),
+                      const SizedBox(width: 50),
                       _buildActionButton(
                         'Terminer',
                         Icons.check,
-                        !isSurfaceFixed ? Colors.green : Colors.grey,
+                        !isSurfaceFixed ? Colors.grey : Colors.red,
                         !isSurfaceFixed ? _completeRoom : () {},
+                      ),
+                      const SizedBox(width: 40),
+                      _buildActionButton(
+                        'Supprimer point',
+                        Icons.delete,
+                        isDeleteMode ? Colors.grey : Colors.grey,
+                        selectedPoint != null && isDeleteMode
+                            ? () => _deletePoint(selectedPoint!)
+                            : _toggleDeleteMode,
                       ),
                     ],
                   ),
